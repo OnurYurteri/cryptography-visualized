@@ -1,0 +1,293 @@
+﻿@{
+    ViewBag.Title = "Anasayfa";
+    var contents = ViewBag.Contents;
+}
+
+<div class="container">
+    <h2>Blog Yazıları</h2>
+    <div id="appendContent" style="word-wrap:break-word;">
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="detailsModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="modalTitle" style="word-wrap:break-word;">Modal Header</h4>
+            </div>
+            <div class="modal-body text-center" id="modalBody" style="word-wrap:break-word;">
+                <p>Some text in the modal.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    var raw =@Html.Raw(contents);
+    function escapeSpecialChars(jsonString) {
+        return jsonString.replace(/\\n/g, "<br>")
+                                      .replace(/\\'/g, "\\'")
+                                      .replace(/\\"/g, '\\"')
+                                      .replace(/\\&/g, "\\&")
+                                      .replace(/\\r/g, "\\r")
+                                      .replace(/\\t/g, "\\t")
+                                      .replace(/\\b/g, "\\b")
+                                      .replace(/\\f/g, "\\f");
+    };
+    var contents = JSON.parse(escapeSpecialChars(raw));
+    var comments;
+    var signatures;
+    window.onload = function () {
+        getComments();
+        fillContent();
+        getSignatures();
+    };
+
+    function fillContent() {
+        for (var i = 0; i < contents.length; i++) {
+            $("#appendContent").append('<div class="jumbotron" id="content'+contents[i].Id+'">'+
+                                            '<h2>'+contents[i].Title+'</h2>'+
+                                            '<h3>Metin</h3>'+
+                                            '<div class="col-md-12">'+
+                                                '<p style="font-size:medium;">'+contents[i].Body+'</p>'+
+                                            '</div>'+
+                                            '<h3>Şifreli Metin</h3>'+
+                                            '<div class="col-md-12">'+
+                                                '<p style="font-size:medium;">'+contents[i].EncryptedBody+'</p>'+
+                                            '</div>'+
+                                            '<h3>Key</h3>'+
+                                            '<div class="col-md-12">'+
+                                                '<p style="font-size:medium;">'+atob(contents[i].EncryptionKey)+'</p>'+
+                                            '</div>'+
+                                            '<h3>Initial Vector (Tuzlama "Salting" İşlemi İçin)</h3>'+
+                                            '<div class="col-md-12">'+
+                                                '<p style="font-size:medium;">'+contents[i].InitialVector+'</p>'+
+                                            '</div>'+
+                                            '<h3>Yorumlar</h3>'+
+                                            '<div id="comments'+contents[i].Id+'">'+
+                                            //fillcomments
+                                                
+                                            //
+                                            '</div>'+
+
+                                            '<button type="button" class="btn btn-info btn-sm" onclick="addRandomComment('+contents[i].Id+')">Random Yorum Ekle</button>'+
+
+                                        '</div>');
+        }
+    };
+
+    function fillComments(){
+        for (var i = 0; i < comments.length; i++) {
+            $("#comments"+comments[i].ContentId).empty();
+        }
+        for (var i = 0; i < comments.length; i++) {
+            $("#comments"+comments[i].ContentId).append('<div class="jumbotron" style="background-color: white; padding: 10px;">'+
+                                                            '<p style="font-size:medium;">'+comments[i].Title+'</p>'+
+                                                            '<button type="button" class="btn btn-info btn-sm" onclick="initializeModal('+comments[i].Id+')">Ayrıntılar</button>'+
+                                                        '</div>');
+        }
+    }
+    function getCommentById(id){
+        for (var i = 0; i < comments.length; i++) {
+            if(comments[i].Id==id){
+                return comments[i];
+            }
+        }
+    }
+    function getSignatureById(id){
+        for (var i = 0; i < signatures.length; i++) {
+            if(signatures[i].Id==id){
+                return signatures[i];
+            }
+        }
+    }
+    function addRandomComment(id){
+        console.log(id);
+        $.ajax({
+            type: "POST",
+            url: '/Home/AddRandomComment/'+id,
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+                if (result) {
+                    getComments();
+                }
+            }
+        });
+    }
+    function getComments() {
+        $.ajax({
+            type: "POST",
+            url: '/Home/GetComments',
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+                comments = result;
+                fillComments();
+            }
+        });
+    }
+    function getSignatures() {
+        $.ajax({
+            type: "POST",
+            url: '/Home/GetSignatures',
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+                signatures = result;
+            }
+        });
+    }
+    function initializeModal(id){
+        var comment= getCommentById(id);
+        if (comment!=null) {
+            $("#modalTitle").empty();
+            $("#modalTitle").append(comment.Title);
+            $("#modalBody").empty();
+            $("#modalBody").append(comment.Body);
+            $("#modalBody").append('<canvas id="myChart" width="400" height="400"></canvas>');
+            var analysis= sortOnKeys(JSON.parse(comment.Analysis));
+            var ctx = document.getElementById("myChart");
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(analysis),
+                    datasets: [{
+                        label: '# Frekans',
+                        data: Object.values(analysis),
+                        backgroundColor: [
+                          'rgba(255, 99, 132, 0.2)',
+                          'rgba(54, 162, 235, 0.2)',
+                          'rgba(255, 206, 86, 0.2)',
+                          'rgba(75, 192, 192, 0.2)',
+                          'rgba(153, 102, 255, 0.2)',
+                          'rgba(255, 159, 64, 0.2)',
+                          'rgba(255, 99, 132, 0.2)',
+                          'rgba(54, 162, 235, 0.2)',
+                          'rgba(255, 206, 86, 0.2)',
+                          'rgba(75, 192, 192, 0.2)',
+                          'rgba(153, 102, 255, 0.2)',
+                          'rgba(255, 159, 64, 0.2)',
+                          'rgba(255, 99, 132, 0.2)',
+                          'rgba(54, 162, 235, 0.2)',
+                          'rgba(255, 206, 86, 0.2)',
+                          'rgba(75, 192, 192, 0.2)',
+                          'rgba(153, 102, 255, 0.2)',
+                          'rgba(255, 159, 64, 0.2)',
+                          'rgba(255, 99, 132, 0.2)',
+                          'rgba(54, 162, 235, 0.2)',
+                          'rgba(255, 206, 86, 0.2)',
+                          'rgba(75, 192, 192, 0.2)',
+                          'rgba(153, 102, 255, 0.2)',
+                          'rgba(255, 159, 64, 0.2)',
+                          'rgba(255, 99, 132, 0.2)',
+                          'rgba(54, 162, 235, 0.2)'
+                        ],
+                        borderColor: [
+                          'rgba(255,99,132,1)',
+                          'rgba(54, 162, 235, 1)',
+                          'rgba(255, 206, 86, 1)',
+                          'rgba(75, 192, 192, 1)',
+                          'rgba(153, 102, 255, 1)',
+                          'rgba(255, 159, 64, 1)',
+                          'rgba(255,99,132,1)',
+                          'rgba(54, 162, 235, 1)',
+                          'rgba(255, 206, 86, 1)',
+                          'rgba(75, 192, 192, 1)',
+                          'rgba(153, 102, 255, 1)',
+                          'rgba(255, 159, 64, 1)',
+                          'rgba(255,99,132,1)',
+                          'rgba(54, 162, 235, 1)',
+                          'rgba(255, 206, 86, 1)',
+                          'rgba(75, 192, 192, 1)',
+                          'rgba(153, 102, 255, 1)',
+                          'rgba(255, 159, 64, 1)',
+                          'rgba(255,99,132,1)',
+                          'rgba(54, 162, 235, 1)',
+                          'rgba(255, 206, 86, 1)',
+                          'rgba(75, 192, 192, 1)',
+                          'rgba(153, 102, 255, 1)',
+                          'rgba(255, 159, 64, 1)',
+                          'rgba(255,99,132,1)',
+                          'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+            if (comment.SignedBy!=0) {
+                var signer= getSignatureById(comment.SignedBy);
+                $("#modalBody").append('Bu yorum <i>'+signer.Description+'</i> tarafından imzalanmıştır.');
+                //<br>Public Key:'+xmlSplit(signer.PublicKey)
+                $("#modalBody").append('<h3>İmzanın Public Key\'i</h3><div class="jumbotron" style="padding:10px; margin:10px;"><p style="font-size:small;">'+xmlSplit(signer.PublicKey)+'</p></div>');
+                $("#modalBody").append('<div class="form-group"><label for="publicKeyToTest">Method Yoluyla Doğrulama İçin Public Key Girin:</label><textarea class="form-control" rows="5" id="publicKeyToTest" style="min-width: 100%;"></textarea></div>');
+                //<button type="button" class="btn btn-info btn-sm" onclick="initializeModal(1)">Ayrıntılar</button>
+                $("#modalBody").append('<button type="button" class="btn btn-info" onclick="verifyWithPublicKey('+comment.Id+')">Doğrula</button>');
+            }
+            $("#detailsModal").modal('show');
+        }
+        
+    }
+    function sortOnKeys(dict) {
+
+        var sorted = [];
+        for(var key in dict) {
+            sorted[sorted.length] = key;
+        }
+        sorted.sort();
+
+        var tempDict = {};
+        for(var i = 0; i < sorted.length; i++) {
+            tempDict[sorted[i]] = dict[sorted[i]];
+        }
+
+        return tempDict;
+    }
+    function xmlSplit(xmlString){
+        return xmlString.match(new RegExp("<Modulus>" + "(.*)" + "</Modulus>"))[1];
+    }
+    function verifyWithPublicKey(commentId){
+        if ($("#publicKeyToTest").val().trim()==="") {
+            alert("Doğrulama için public key girmelisiniz!");
+            return;
+        }
+        var publicKeyXml="<RSAKeyValue><Modulus>"+$("#publicKeyToTest").val().trim()+"</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>";
+        console.log(commentId,publicKeyXml);
+        var data = new Object();
+        data.commentId=commentId;
+        data.publicKey=publicKeyXml;
+        $.ajax({
+            type: "POST",
+            url: '/Home/VerifyComment/',
+            dataType: "json",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+                if (result) {
+                    alert("İmza Doğrulaması Başarılı!");
+                }
+                else{
+                    alert("İmza Doğru Değil!");
+                }
+            }
+        });
+    }
+</script>
