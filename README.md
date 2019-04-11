@@ -1,2 +1,2 @@
 # CryptBlog
-Project of BSc subject Cryptography
+Project of BSc subject Cryptography, Spring 2019 
