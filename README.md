@@ -19,7 +19,7 @@ Veritabanı için herhangi bir import işlemi yapmanıza gerek yoktur. Doğrudan
 şifreler ve veritabanına insert eder.
 -EncryptionModel.cs üzerinde decrypt metotu da bulunmaktadır.
 
-** 5.Senaryo yorum: **
+**5.Senaryo yorum:**
   *Aes algoritmasının çalışma prensibi ve InitialVector yardımıyla salting işlemi yapıldığı için(tekrar eden kelimeler vb. durumların yarattığı
   'dictionary attack' zaafiyetini ortadan kaldırmak için her şifrelemede rastgele oluşturulup saklanmaktadır) senaryo-5.1 ve senaryo-5.2 arasında
   zaafiyete sebep olacak herhangi bir benzerlik, tekrar eden bir kalıp vs. görülmemiştir.
@@ -35,23 +35,23 @@ AddRandomComment methoduyla random oluşturulmuş ve commentModel class'ıyla ve
 -Veritabanında yorum: [ID,ContentId,Title,Body,Analysis] şeklinde tutulmaktadır. contentId ait olduğu blog postu title: bu örnek dahilinde random string,
 body: string'in açıklaması, Analysis: frekans dağılımının json objesi halinde tutumunu sağlar.
 
-** Yorum:
+**Yorum:**
   *Standart C# random class'ının CPU clock'u seed olarak kullanarak tahmin edilebilir olmasına karşın,
   RNGCryptoServiceProvider işletim sisteminin 'Entropy'siyle tamamen rastgele bir seed ile rastsal bir sayı oluşturarak iyileştirme sağlandı.
   Proje üzerinde herhangi bir blog girdisi altına random yorum girme butonu eklendi. Böylece CPU saatinden bağımsız rastsallık test edilebilir.
-  Yorum'un ayrıntılarına tıkladığınızda açılan modal'da random stringin karakter dağılım grafiğini görebilirsiniz.
+  Yorum'un ayrıntılarına tıkladığınızda açılan modal'da random stringin karakter dağılım grafiğini görebilirsiniz.*
 
 ## PROJE ADIM-4
 Kullanım:
 -İmzalar veritabanında 'SignatureEntity' [Id,Description,PublicKey,PrivateKey] şeklinde tutulmaktadır.
 -'SignatureModel.cs' üzerinden
-  *-Tüm imzalar alınabilir, güvenlik zaafiyeti oluşmaması için privateKey içermeyen 'SelectAllOnlyPublicKey' methodu ile de imzalar alınabilir.
-  *'CreateNewSignature' methoduna yeni oluşturulması istenen imza için açıklama gönderilir, method imza oluşturur ve veritabanına kaydeder.
-  *public olan 'SignComment' methoduna imzalanmak için kullanılacak imzanın signatureId'si ve imzalanacak yorumun commentId'si gönderilir,
+  -Tüm imzalar alınabilir, güvenlik zaafiyeti oluşmaması için privateKey içermeyen 'SelectAllOnlyPublicKey' methodu ile de imzalar alınabilir.
+  'CreateNewSignature' methoduna yeni oluşturulması istenen imza için açıklama gönderilir, method imza oluşturur ve veritabanına kaydeder.
+   *public olan 'SignComment' methoduna imzalanmak için kullanılacak imzanın signatureId'si ve imzalanacak yorumun commentId'si gönderilir,
    method class içindeki private 'SignString' methoduyla imzalamayı yapar, imzalanmış veriyi ve hangi imza ile imzalandığı(signatureId)
    bilgisini veritabanındaki yorumu günceller.(Yorumların tutulduğu 'CommentEntity' tablosunda imzalanacak yoruma ait 'SignedBy' ve 'SignedData')
-  *public olan 'VerifyComment' methoduna doğrulanması istenen yorum'un Id'si ve doğrulama için kullanılacak publicKey gönderilir,
-   method class içindeki private 'VerifyString' methoduyla doğrulama yapar, doğrulama sonucunu geriye döndürür(bool)
+  public olan 'VerifyComment' methoduna doğrulanması istenen yorum'un Id'si ve doğrulama için kullanılacak publicKey gönderilir,
+   method class içindeki private 'VerifyString' methoduyla doğrulama yapar, doğrulama sonucunu geriye döndürür(bool)*
 
 **Test Senaryosu:**
 -Projede hali hazırda 'Onur Yurteri' ve 'Bob Ross' isimli 2 imza oluşturulmuştur. Yeni imza SignatureModel class'ı üzerinden
@@ -61,5 +61,6 @@ CreateNewSignature ile oluşturulabilir.
 görüntülenecektir. İmzalı olmayan yorumlarda bu bilgiler doğal olarak gözükmemektedir.
 -Ayrıca 'SignatureModel' üzerindeki 'VerifyComment' methodu yardımıyla doğrulama testi için kullanıcının public key girebileceği input bulunmaktadır.
 kullanıcı public key girebilir ve doğrulama yapabilir.
+
 =======
-Project of BSc subject Cryptography, Spring 2019 
+Project of BSc subject Cryptography, Spring 2019
