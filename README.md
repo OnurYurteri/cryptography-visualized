@@ -1,4 +1,5 @@
 # CryptBlog
+<<<<<<< HEAD
 Project of BSc subject Cryptography
 
 ##PROJE ADIM-1
@@ -61,3 +62,6 @@ CreateNewSignature ile oluşturulabilir.
 görüntülenecektir. İmzalı olmayan yorumlarda bu bilgiler doğal olarak gözükmemektedir.
 -Ayrıca 'SignatureModel' üzerindeki 'VerifyComment' methodu yardımıyla doğrulama testi için kullanıcının public key girebileceği input bulunmaktadır.
 kullanıcı public key girebilir ve doğrulama yapabilir.
+=======
+Project of BSc subject Cryptography, Spring 2019 
+>>>>>>> c0e4d8536984869f0f8aead4d42a1d85f7126136
