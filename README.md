@@ -1,13 +1,12 @@
 # CryptBlog
-<<<<<<< HEAD
 Project of BSc subject Cryptography
 
-##PROJE ADIM-1
+## PROJE ADIM-1
 Proje klasörü içindeki "CryptBlog.sln" dosyasını açarak Visual Studio üzerinde çalıştırabilirsiniz.
 Veritabanı için ödev kontrolünü kolaylaştırmak açısından SQLLite kullanılmıştır. ("test.db" isimli dosya veritabanı dosyasıdır.)
 Veritabanı için herhangi bir import işlemi yapmanıza gerek yoktur. Doğrudan projeyi çalıştırıp incelemeye başlayabilirsiniz.
 
-##PROJE ADIM-2
+## PROJE ADIM-2
 -Bu adım için AES şifreleme algoritması seçilmiştir.
 -Veritabanı tablosu üzerinde değişiklikler yapılmıştır.
 -Tablo artık ayrıca blog içeriklerinin şifreli hali, şifreleyen key ve initial vector tutulmaktadır.
@@ -20,14 +19,14 @@ Veritabanı için herhangi bir import işlemi yapmanıza gerek yoktur. Doğrudan
 şifreler ve veritabanına insert eder.
 -EncryptionModel.cs üzerinde decrypt metotu da bulunmaktadır.
 
-**5.Senaryo yorum:**
+** 5.Senaryo yorum: **
   *Aes algoritmasının çalışma prensibi ve InitialVector yardımıyla salting işlemi yapıldığı için(tekrar eden kelimeler vb. durumların yarattığı
   'dictionary attack' zaafiyetini ortadan kaldırmak için her şifrelemede rastgele oluşturulup saklanmaktadır) senaryo-5.1 ve senaryo-5.2 arasında
   zaafiyete sebep olacak herhangi bir benzerlik, tekrar eden bir kalıp vs. görülmemiştir.
 NOT:Tarayıcınızın geliştirici konsolu üzerinden(ör: Chrome'da f12) 'contents' javascript objesine ulaşıp keşif yapabilirsiniz.:) Örneğin: Key byte array olarak saklanmakta
 sadece görüntülerken base64String'e çevrilmektedir. (javascript function:> atob())*
 
-##PROJE ADIM-3
+## PROJE ADIM-3
 Kullanım:
 -'RandomCommentModel.cs' class'ı .net Cryptography namespace'i içindeki RNGCryptoServiceProvider'ı kullanarak
 100 karater uzunluğunda random string oluşturur. Aynı zamanda karakterlerin dağılımını hesaplar.
@@ -36,13 +35,13 @@ AddRandomComment methoduyla random oluşturulmuş ve commentModel class'ıyla ve
 -Veritabanında yorum: [ID,ContentId,Title,Body,Analysis] şeklinde tutulmaktadır. contentId ait olduğu blog postu title: bu örnek dahilinde random string,
 body: string'in açıklaması, Analysis: frekans dağılımının json objesi halinde tutumunu sağlar.
 
-**Yorum:**
+** Yorum:
   *Standart C# random class'ının CPU clock'u seed olarak kullanarak tahmin edilebilir olmasına karşın,
   RNGCryptoServiceProvider işletim sisteminin 'Entropy'siyle tamamen rastgele bir seed ile rastsal bir sayı oluşturarak iyileştirme sağlandı.
   Proje üzerinde herhangi bir blog girdisi altına random yorum girme butonu eklendi. Böylece CPU saatinden bağımsız rastsallık test edilebilir.
-  Yorum'un ayrıntılarına tıkladığınızda açılan modal'da random stringin karakter dağılım grafiğini görebilirsiniz.*
+  Yorum'un ayrıntılarına tıkladığınızda açılan modal'da random stringin karakter dağılım grafiğini görebilirsiniz.
 
-##PROJE ADIM-4
+## PROJE ADIM-4
 Kullanım:
 -İmzalar veritabanında 'SignatureEntity' [Id,Description,PublicKey,PrivateKey] şeklinde tutulmaktadır.
 -'SignatureModel.cs' üzerinden
@@ -53,7 +52,7 @@ Kullanım:
    bilgisini veritabanındaki yorumu günceller.(Yorumların tutulduğu 'CommentEntity' tablosunda imzalanacak yoruma ait 'SignedBy' ve 'SignedData')
   *public olan 'VerifyComment' methoduna doğrulanması istenen yorum'un Id'si ve doğrulama için kullanılacak publicKey gönderilir,
    method class içindeki private 'VerifyString' methoduyla doğrulama yapar, doğrulama sonucunu geriye döndürür(bool)
-   
+
 **Test Senaryosu:**
 -Projede hali hazırda 'Onur Yurteri' ve 'Bob Ross' isimli 2 imza oluşturulmuştur. Yeni imza SignatureModel class'ı üzerinden
 CreateNewSignature ile oluşturulabilir.
@@ -64,4 +63,3 @@ görüntülenecektir. İmzalı olmayan yorumlarda bu bilgiler doğal olarak göz
 kullanıcı public key girebilir ve doğrulama yapabilir.
 =======
 Project of BSc subject Cryptography, Spring 2019 
->>>>>>> c0e4d8536984869f0f8aead4d42a1d85f7126136
