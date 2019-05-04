@@ -1,5 +1,5 @@
 # CryptBlog
-Project of BSc subject Cryptography
+Project of BSc subject Cryptography, Spring 2019
 
 ## PROJE ADIM-1
 Proje klasörü içindeki "CryptBlog.sln" dosyasını açarak Visual Studio üzerinde çalıştırabilirsiniz.
@@ -8,7 +8,7 @@ Veritabanı için herhangi bir import işlemi yapmanıza gerek yoktur. Doğrudan
 
 ## PROJE ADIM-2
 * Bu adım için AES şifreleme algoritması seçilmiştir.
-* eritabanı tablosu üzerinde değişiklikler yapılmıştır.
+* Veritabanı tablosu üzerinde değişiklikler yapılmıştır.
 * Tablo artık ayrıca blog içeriklerinin şifreli hali, şifreleyen key ve initial vector tutulmaktadır.
 * Models/EncryptionModel.cs 'de projede kullanılabilecek ileriye dönük metotlar bulunmaktadır.
 * AES algoritmasının gereksinimi üzerine key en az 24 karakterli olmalıdır.
@@ -27,7 +27,7 @@ NOT:Tarayıcınızın geliştirici konsolu üzerinden(ör: Chrome'da f12) 'conte
 sadece görüntülerken base64String'e çevrilmektedir. (javascript function:> atob())*
 
 ## PROJE ADIM-3
-Kullanım:
+**Kullanım:**
 * 'RandomCommentModel.cs' class'ı .net Cryptography namespace'i içindeki RNGCryptoServiceProvider'ı kullanarak
 100 karater uzunluğunda random string oluşturur. Aynı zamanda karakterlerin dağılımını hesaplar.
 * Proje'nin herhangi bir yerinde bu class yardımıyla random string oluşturulabilir. Örnek kullanım dahilinde; HomeController içinde
@@ -42,7 +42,7 @@ body: string'in açıklaması, Analysis: frekans dağılımının json objesi ha
   Yorum'un ayrıntılarına tıkladığınızda açılan modal'da random stringin karakter dağılım grafiğini görebilirsiniz.*
 
 ## PROJE ADIM-4
-Kullanım:
+**Kullanım:**
 * İmzalar veritabanında 'SignatureEntity' [Id,Description,PublicKey,PrivateKey] şeklinde tutulmaktadır.
 * 'SignatureModel.cs' üzerinden
   * Tüm imzalar alınabilir, güvenlik zaafiyeti oluşmaması için privateKey içermeyen 'SelectAllOnlyPublicKey' methodu ile de imzalar alınabilir.
@@ -61,6 +61,3 @@ CreateNewSignature ile oluşturulabilir.
 görüntülenecektir. İmzalı olmayan yorumlarda bu bilgiler doğal olarak gözükmemektedir.
 * Ayrıca 'SignatureModel' üzerindeki 'VerifyComment' methodu yardımıyla doğrulama testi için kullanıcının public key girebileceği input bulunmaktadır.
 kullanıcı public key girebilir ve doğrulama yapabilir.
-
-=======
-Project of BSc subject Cryptography, Spring 2019
