@@ -1,12 +1,12 @@
-# CryptBlog
+# Lecture Notes
 Project of BSc subject Cryptography, Spring 2019
 
-## PROJE ADIM-1
+## Week 1 (Setting up)
 Proje klasörü içindeki "CryptBlog.sln" dosyasını açarak Visual Studio üzerinde çalıştırabilirsiniz.
 Veritabanı için ödev kontrolünü kolaylaştırmak açısından SQLLite kullanılmıştır. ("test.db" isimli dosya veritabanı dosyasıdır.)
 Veritabanı için herhangi bir import işlemi yapmanıza gerek yoktur. Doğrudan projeyi çalıştırıp incelemeye başlayabilirsiniz.
 
-## PROJE ADIM-2
+## Week 2
 * Bu adım için AES şifreleme algoritması seçilmiştir.
 * Veritabanı tablosu üzerinde değişiklikler yapılmıştır.
 * Tablo artık ayrıca blog içeriklerinin şifreli hali, şifreleyen key ve initial vector tutulmaktadır.
@@ -26,7 +26,7 @@ Veritabanı için herhangi bir import işlemi yapmanıza gerek yoktur. Doğrudan
 NOT:Tarayıcınızın geliştirici konsolu üzerinden(ör: Chrome'da f12) 'contents' javascript objesine ulaşıp keşif yapabilirsiniz.:) Örneğin: Key byte array olarak saklanmakta
 sadece görüntülerken base64String'e çevrilmektedir. (javascript function:> atob())*
 
-## PROJE ADIM-3
+## Week 3
 **Kullanım:**
 * 'RandomCommentModel.cs' class'ı .net Cryptography namespace'i içindeki RNGCryptoServiceProvider'ı kullanarak
 100 karater uzunluğunda random string oluşturur. Aynı zamanda karakterlerin dağılımını hesaplar.
@@ -41,7 +41,7 @@ body: string'in açıklaması, Analysis: frekans dağılımının json objesi ha
   Proje üzerinde herhangi bir blog girdisi altına random yorum girme butonu eklendi. Böylece CPU saatinden bağımsız rastsallık test edilebilir.
   Yorum'un ayrıntılarına tıkladığınızda açılan modal'da random stringin karakter dağılım grafiğini görebilirsiniz.*
 
-## PROJE ADIM-4
+## Week 4
 **Kullanım:**
 * İmzalar veritabanında 'SignatureEntity' [Id,Description,PublicKey,PrivateKey] şeklinde tutulmaktadır.
 * 'SignatureModel.cs' üzerinden
